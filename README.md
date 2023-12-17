@@ -1,6 +1,7 @@
 # Weather Today Completed
-# A weather app has been built where temperature, minimum_temperature,maximum_temperature,windspeed and humidity is shown of the current location and any location searched for.
-It's been done by Mehedi Noor Khan and Ali Daud Hossain
+
+A weather app has been built where different data regarding weather like minimum and maximum temparature, humidity, wind speed is shown on the screen of current location and different other cities in the world if searched.
+#It's been done by Mehedi Noor Khan and Ali Daud Hossain
 
 ## Getting Started
 
