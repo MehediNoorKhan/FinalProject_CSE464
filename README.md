@@ -1,9 +1,9 @@
-# Weather Today Completed
 
 A weather app has been built where different data regarding weather like minimum and maximum temparature, humidity, wind speed is shown on the screen of current location and different other cities in the world if searched.
-#It's been done by Mehedi Noor Khan and Ali Daud Hossain
 
-## Getting Started
+
+## Mehedi Noor Khan 2020722
+## Ali Daud Hossain 1930544
 
 This project is a starting point for a Flutter application.
 
