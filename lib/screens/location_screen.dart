@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_today_completed/utils/constants.dart';
+import '../services/location.dart';
+import '../services/network.dart';
 import '../utils/custom_paint.dart';
 import 'city_screen.dart';
 
@@ -17,7 +19,7 @@ class LocationScreenState extends State<LocationScreen> {
   int minTemperature = 0;
   int maxTemperature = 0;
   double windSpeed = 0.0;
-  int humidity = 50;
+  int humidity = 0;
 
   String cityName = "Dhaka";
 
@@ -26,6 +28,17 @@ class LocationScreenState extends State<LocationScreen> {
     super.initState();
 
     updateUI(widget.locationWeather);
+  }
+
+  Future<dynamic> getCityWeatherlonglan(
+      double latitude, double longitude) async {
+    final String weatherUrl =
+        "https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=247d2898a61c28541b150bedd751fabe&units=metric"; //This is My API. Change to yours.
+    NetworkHelper networkHelper = NetworkHelper('$weatherUrl');
+    print('Latitude: $latitude, Longitude: $longitude');
+
+    var weatherData = await networkHelper.getData();
+    return weatherData;
   }
 
   void updateUI(dynamic weatherData) {
@@ -42,12 +55,11 @@ class LocationScreenState extends State<LocationScreen> {
       double windSp = weatherData['wind']['speed'].toDouble();
       windSpeed = windSp;
 
-      int humidity = weatherData['main']['humidity'];
-      humidity = humidity.toInt();
+      int humi = weatherData['main']['humidity'];
+      humidity = humi;
 
       String city = weatherData['name'];
       cityName = city;
-
     });
   }
 
@@ -88,7 +100,27 @@ class LocationScreenState extends State<LocationScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () async {},
+                      onTap: () async {
+                        try {
+                          Map<String, double> locationData =
+                              await Location().getCurrentLocation();
+                          double latitude = locationData['latitude']!;
+                          double longitude = locationData['longitude']!;
+                          print('Latitude: $latitude, Longitude: $longitude');
+
+                          var weatherData =
+                              await getCityWeatherlonglan(latitude, longitude);
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return LocationScreen(
+                                locationWeather: weatherData,
+                              );
+                            },
+                          ));
+                        } catch (e) {
+                          print('Error getting location: $e');
+                        }
+                      },
                       child: Image.asset(
                         'images/ic_current_location.png',
                         width: 32.0,

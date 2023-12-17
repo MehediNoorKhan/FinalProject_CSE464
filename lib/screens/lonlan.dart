@@ -3,27 +3,30 @@ import '../services/network.dart';
 import 'location_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class LoadingScreen extends StatefulWidget {
-  final String cityName;
+class Lonlan extends StatefulWidget {
+  final double latitude;
+  final double longitude;
 
-  LoadingScreen({required this.cityName});
+  Lonlan({
+    required this.latitude,
+    required this.longitude,
+  });
 
   @override
   State<StatefulWidget> createState() {
-    return _LoadingScreenState();
+    return _LonlanScreenState();
   }
 }
 
-class _LoadingScreenState extends State<LoadingScreen> {
+class _LonlanScreenState extends State<Lonlan> {
   @override
   void initState() {
     super.initState();
-    getLocationData(widget.cityName);
+    getLatlonData(widget.latitude, widget.longitude);
   }
 
-  // Method to get weather data
-  void getLocationData(String cityName) async {
-    var weatherData = await getCityWeather(cityName);
+  void getLatlonData(double latitude, double longitude) async {
+    var weatherData = await getCityWeatherlonglan(latitude, longitude);
 
     Navigator.push(
       context,
@@ -37,11 +40,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
   }
 
-  // Method to make API call
-  Future<dynamic> getCityWeather(String cityName) async {
+  Future<dynamic> getCityWeatherlonglan(
+      double latitude, double longitude) async {
     final String weatherUrl =
-        "https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=247d2898a61c28541b150bedd751fabe&units=metric"; //This is My API. Change to yours.
+        "https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=247d2898a61c28541b150bedd751fabe&units=metric"; //This is My API. Change to yours.
     NetworkHelper networkHelper = NetworkHelper('$weatherUrl');
+    print('Latitude: $latitude, Longitude: $longitude');
 
     var weatherData = await networkHelper.getData();
     return weatherData;

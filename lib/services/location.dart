@@ -1,10 +1,10 @@
 import 'package:geolocator/geolocator.dart';
 
 class Location {
-  late double latitude;
-  late double longitude;
+  double latitude = 0.0;
+  double longitude = 0.0;
 
-  Future<void> getCurrentLocation() async {
+  Future<Map<String, double>> getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -14,7 +14,7 @@ class Location {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-      return Future.error('Location services are disabled.');
+      throw ('Location services are disabled.');
     }
 
     permission = await Geolocator.checkPermission();
@@ -22,8 +22,7 @@ class Location {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.deniedForever) {
         // Permissions are denied forever, handle appropriately.
-        return Future.error(
-            'Location permissions are permanently denied, we cannot request permissions.');
+        throw ('Location permissions are permanently denied, we cannot request permissions.');
       }
 
       if (permission == LocationPermission.denied) {
@@ -32,7 +31,7 @@ class Location {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+        throw ('Location permissions are denied');
       }
     }
 
@@ -41,5 +40,8 @@ class Location {
     Position position = await Geolocator.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
+
+    // Return latitude and longitude as a Map
+    return {'latitude': latitude, 'longitude': longitude};
   }
 }
